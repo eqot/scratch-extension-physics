@@ -8,11 +8,10 @@ export class Physics {
 
   constructor() {
     const canvas = document.createElement('canvas')
-    canvas.width = 480
-    canvas.height = 360
     canvas.style.zIndex = '100'
     canvas.style.position = 'absolute'
-    canvas.style.bottom = '0'
+    canvas.style.bottom = '0px'
+    canvas.style.left = '320px'
     document.body.prepend(canvas)
 
     this.engine = new Engine.create()
@@ -27,11 +26,11 @@ export class Physics {
     const render = Render.create({
       canvas,
       engine: this.engine,
-      width: 480,
-      height: 360,
       bounds,
       options: {
         hasBounds: true,
+        width: 480,
+        height: 360,
       },
     })
 
