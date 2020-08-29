@@ -1,5 +1,5 @@
 {
-  "name": "scratch-extension-template",
+  "name": "scratch-extension-physics",
   "version": "0.1.0",
   "main": "dist/index.js",
   "license": "MIT",
@@ -20,5 +20,9 @@
     "webpack": "^4.44.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "matter-js": "^0.14.2",
+    "poly-decomp": "^0.3.0"
   }
 }
