@@ -61,13 +61,12 @@ class PhysicsExtension {
     const [offsetX, offsetY] = drawable.skin.rotationCenter
     const [scaleX, scaleY] = drawable.scale.map(value => value / 100)
 
-    const vertices = drawable._convexHullPoints.map(([x, y]) => ({
-      x: (x - offsetX) * scaleX,
-      y: (y - offsetY) * scaleY,
-    }))
+    const vertices = drawable._convexHullPoints.map(([x, y]) => [
+      (x - offsetX) * scaleX,
+      (y - offsetY) * scaleY,
+    ])
 
     const body = this.physics.createBody(positionX, -positionY, vertices, direction)
-    // console.log(body)
 
     this.body = body
   }

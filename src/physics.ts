@@ -1,4 +1,4 @@
-import { Engine, Render, World, Bodies, Bounds } from 'matter-js'
+import { Engine, Render, World, Bodies, Body, Bounds } from 'matter-js'
 import decomp from 'poly-decomp'
 
 window.decomp = decomp
@@ -44,7 +44,13 @@ export class Physics {
   }
 
   createBody(x: number, y: number, vertices, angle: number): Body {
-    const body = Bodies.fromVertices(x, y, vertices, { angle: ((angle - 90) * Math.PI) / 180 })
+    // Remove duplicate points to create body as expected
+    decomp.removeDuplicatePoints(vertices, 0.01)
+
+    // Convert array into object for matter.js
+    const xyVertices = vertices.map(([x, y]) => ({ x, y }))
+
+    const body = Bodies.fromVertices(x, y, xyVertices, { angle: ((angle - 90) * Math.PI) / 180 })
     // console.log(body)
     if (!body) {
       return
