@@ -10,7 +10,8 @@ class PhysicsExtension {
   private runtime: Runtime
 
   private physics: Physics
-  private body: Body
+
+  private bodies = new Map()
 
   constructor(runtime: Runtime) {
     this.runtime = runtime
@@ -32,12 +33,17 @@ class PhysicsExtension {
         {
           opcode: 'activate',
           blockType: BlockType.COMMAND,
-          text: 'activate',
+          text: 'このスプライトで有効にする',
         },
         {
-          opcode: 'tick',
+          opcode: 'start',
           blockType: BlockType.COMMAND,
-          text: 'tick',
+          text: '開始する',
+        },
+        {
+          opcode: 'stop',
+          blockType: BlockType.COMMAND,
+          text: '停止する',
         },
       ],
     }
@@ -49,7 +55,6 @@ class PhysicsExtension {
     // console.log(target)
 
     const drawable = renderer._allDrawables[target.drawableID]
-    // console.log(drawable)
 
     if (drawable.needsConvexHullPoints()) {
       const points = renderer._getConvexHullPointsForDrawable(target.drawableID)
@@ -66,22 +71,29 @@ class PhysicsExtension {
       (y - offsetY) * scaleY,
     ])
 
-    const body = this.physics.createBody(positionX, -positionY, vertices, direction)
+    const body = this.physics.addBody(positionX, -positionY, vertices, direction)
 
-    this.body = body
-
-    this.physics.start()
+    this.bodies.set(drawable.id, { body, target })
   }
 
-  tick(args: any, util) {
-    const { target } = util
-    // const { renderer } = this.runtime
+  start() {
+    const { renderer } = this.runtime
 
-    const { x, y } = this.body.position
-    const direction = (this.body.angle * 180) / Math.PI + 90
+    this.physics.start(this.updateRenderTarget)
+  }
 
-    target.setXY(x, -y)
-    target.setDirection(direction)
+  stop() {
+    this.physics.stop()
+  }
+
+  updateRenderTarget = () => {
+    for (const [id, { body, target }] of this.bodies.entries()) {
+      const { x, y } = body.position
+      const direction = (body.angle * 180) / Math.PI + 90
+
+      target.setXY(x, -y)
+      target.setDirection(direction)
+    }
   }
 }
 

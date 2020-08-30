@@ -1,4 +1,4 @@
-import { Engine, Render, World, Bodies, Body, Bounds } from 'matter-js'
+import { Engine, Render, Runner, World, Bodies, Body, Bounds, Events } from 'matter-js'
 import decomp from 'poly-decomp'
 
 import { Scratch } from './scratch'
@@ -17,17 +17,21 @@ export class Physics {
     THICKNESS: 10,
   }
 
+  private state: State = State.STOP
+
   private engine: Engine
+  private runner: Runner
   private render: Render
 
-  private state: State = State.STOP
+  private listener?: () => void
 
   constructor() {
     this.initialize()
   }
 
   private initialize() {
-    this.engine = new Engine.create()
+    this.engine = Engine.create()
+    this.runner = Runner.create()
 
     const canvas = this.getCanvas()
 
@@ -84,7 +88,7 @@ export class Physics {
     return Bodies.rectangle(modifiedX, modifiedY, width, height, { isStatic: true })
   }
 
-  createBody(x: number, y: number, vertices, angle: number): Body {
+  addBody(x: number, y: number, vertices, angle: number): Body {
     // Remove duplicate points to create body as expected
     decomp.removeDuplicatePoints(vertices, 0.01)
 
@@ -101,21 +105,35 @@ export class Physics {
     return body
   }
 
-  start() {
-    if (this.state !== State.RUNNING) {
-      this.state = State.RUNNING
+  start(listener: () => void) {
+    if (this.state === State.RUNNING) {
+      return
+    }
+    this.state = State.RUNNING
 
-      Engine.run(this.engine)
-      Render.run(this.render)
+    this.listener = listener
+
+    Runner.run(this.engine)
+    Render.run(this.render)
+
+    if (this.listener) {
+      Events.on(this.engine, 'afterTick', this.listener)
     }
   }
 
   stop() {
-    if (this.state !== State.STOP) {
-      this.state = State.STOP
+    if (this.state === State.STOP) {
+      return
+    }
+    this.state = State.STOP
 
-      Engine.run(this.engine)
-      Render.stop(this.render)
+    Runner.stop(this.runner)
+    Render.stop(this.render)
+
+    if (this.listener) {
+      Events.off(this.engine, 'afterTick', this.listener)
+
+      this.listener = null
     }
   }
 }
