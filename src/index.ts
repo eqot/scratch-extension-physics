@@ -49,7 +49,7 @@ class PhysicsExtension {
     }
   }
 
-  activate(args: any, util) {
+  activate(args: any, util): void {
     const { target } = util
     const { renderer } = this.runtime
     // console.log(target)
@@ -76,17 +76,15 @@ class PhysicsExtension {
     this.bodies.set(drawable.id, { body, target })
   }
 
-  start() {
-    const { renderer } = this.runtime
-
-    this.physics.start(this.updateRenderTarget)
+  start(): void {
+    this.physics.start(() => this.updateRenderTarget())
   }
 
-  stop() {
+  stop(): void {
     this.physics.stop()
   }
 
-  updateRenderTarget = () => {
+  updateRenderTarget(): void {
     for (const [id, { body, target }] of this.bodies.entries()) {
       const { x, y } = body.position
       const direction = (body.angle * 180) / Math.PI + 90

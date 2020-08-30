@@ -105,7 +105,7 @@ export class Physics {
     return body
   }
 
-  start(listener: () => void) {
+  start(listener: () => void): void {
     if (this.state === State.RUNNING) {
       return
     }
@@ -121,7 +121,7 @@ export class Physics {
     }
   }
 
-  stop() {
+  stop(): void {
     if (this.state === State.STOP) {
       return
     }
