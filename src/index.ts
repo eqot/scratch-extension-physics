@@ -69,6 +69,8 @@ class PhysicsExtension {
     const body = this.physics.createBody(positionX, -positionY, vertices, direction)
 
     this.body = body
+
+    this.physics.start()
   }
 
   tick(args: any, util) {
