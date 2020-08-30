@@ -5,6 +5,7 @@ import Cast from 'scratch-vm/src/util/cast'
 import RenderedTarget from 'scratch-vm/src/sprites/rendered-target'
 
 import { Physics } from './physics'
+import { Scratch } from './scratch'
 
 class PhysicsExtension {
   private runtime: Runtime
@@ -84,10 +85,10 @@ class PhysicsExtension {
     this.physics.stop()
   }
 
-  updateRenderTarget(): void {
+  private updateRenderTarget(): void {
     for (const [id, { body, target }] of this.bodies.entries()) {
       const { x, y } = body.position
-      const direction = (body.angle * 180) / Math.PI + 90
+      const direction = Scratch.directionTo(body.angle)
 
       target.setXY(x, -y)
       target.setDirection(direction)

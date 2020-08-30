@@ -95,7 +95,7 @@ export class Physics {
     // Convert array into object for matter.js
     const xyVertices = vertices.map(([x, y]) => ({ x, y }))
 
-    const body = Bodies.fromVertices(x, y, xyVertices, { angle: ((angle - 90) * Math.PI) / 180 })
+    const body = Bodies.fromVertices(x, y, xyVertices, { angle: Scratch.directionFrom(angle) })
     if (!body) {
       return
     }
