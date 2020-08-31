@@ -83,6 +83,10 @@ export class Physics {
     return body
   }
 
+  removeBody(body: Body): void {
+    World.remove(this.engine.world, body)
+  }
+
   start(listener: () => void): void {
     if (this.state === State.RUNNING) {
       return

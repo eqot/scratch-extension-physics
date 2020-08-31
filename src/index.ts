@@ -151,6 +151,12 @@ class PhysicsExtension {
 
   private updateRenderedTarget(): void {
     for (const [id, { body, target }] of this.bodies.entries()) {
+      const t = this.runtime.getTargetById(target.id)
+      if (!t) {
+        this.physics.removeBody(body)
+        continue
+      }
+
       const { x, y } = body.position
       const direction = Scratch.directionTo(body.angle)
 
