@@ -34,7 +34,13 @@ class PhysicsExtension {
         {
           opcode: 'activate',
           blockType: BlockType.COMMAND,
-          text: 'このスプライトで有効にする',
+          text: '[TARGET] で有効にする',
+          arguments: {
+            TARGET: {
+              type: ArgumentType.STRING,
+              menu: 'activationTarget',
+            },
+          },
         },
         {
           opcode: 'start',
@@ -47,11 +53,47 @@ class PhysicsExtension {
           text: '停止する',
         },
       ],
+
+      menus: {
+        activationTarget: {
+          acceptReporters: true,
+          items: [
+            {
+              value: 'allSprites',
+              text: 'すべてのスプライト',
+            },
+            {
+              value: 'thisSprite',
+              text: 'このスプライト',
+            },
+          ],
+        },
+      },
     }
   }
 
   activate(args: any, util): void {
-    const { target } = util
+    switch (args.TARGET) {
+      case 'thisSprite':
+        this.activateRenderedTarget(util.target)
+        break
+
+      case 'allSprites':
+        for (const target of this.runtime.targets) {
+          this.activateRenderedTarget(target)
+        }
+        break
+
+      default:
+        break
+    }
+  }
+
+  private activateRenderedTarget(target: RenderedTarget): void {
+    if (target.isStage || this.bodies.has(target.drawableID)) {
+      return
+    }
+
     const { renderer } = this.runtime
     // console.log(target)
 
@@ -74,18 +116,18 @@ class PhysicsExtension {
 
     const body = this.physics.addBody(positionX, -positionY, vertices, direction)
 
-    this.bodies.set(drawable.id, { body, target })
+    this.bodies.set(target.drawableID, { body, target })
   }
 
   start(): void {
-    this.physics.start(() => this.updateRenderTarget())
+    this.physics.start(() => this.updateRenderedTarget())
   }
 
   stop(): void {
     this.physics.stop()
   }
 
-  private updateRenderTarget(): void {
+  private updateRenderedTarget(): void {
     for (const [id, { body, target }] of this.bodies.entries()) {
       const { x, y } = body.position
       const direction = Scratch.directionTo(body.angle)
