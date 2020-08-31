@@ -1,8 +1,6 @@
 import { Engine, Render, Runner, World, Bodies, Body, Bounds, Events } from 'matter-js'
 import decomp from 'poly-decomp'
 
-import { Scratch } from './scratch'
-
 // Set poly-decomp to global variable for matter.js
 window.decomp = decomp
 
@@ -27,15 +25,13 @@ export class Physics {
 
   private listener?: () => void
 
-  constructor() {
-    this.initialize()
+  constructor(canvas: HTMLCanvasElement) {
+    this.initialize(canvas)
   }
 
-  private initialize() {
+  private initialize(canvas: HTMLCanvasElement) {
     this.engine = Engine.create()
     this.runner = Runner.create()
-
-    const canvas = this.getCanvas()
 
     const xMax = canvas.width / 2
     const yMax = canvas.height / 2
@@ -63,26 +59,6 @@ export class Physics {
     World.add(this.engine.world, [bottom, left, right])
   }
 
-  private getCanvas(): HTMLCanvasElement {
-    const element = document.querySelector('canvas.physics') as HTMLCanvasElement
-    if (element) {
-      return element
-    }
-
-    const canvas = document.createElement('canvas')
-    canvas.className = 'physics'
-    canvas.width = Scratch.Canvas.WIDTH
-    canvas.height = Scratch.Canvas.HEIGHT
-    canvas.style.zIndex = '100'
-    canvas.style.position = 'absolute'
-    canvas.style.bottom = '0px'
-    canvas.style.left = '320px'
-
-    document.body.prepend(canvas)
-
-    return canvas
-  }
-
   private createBoundary(x: number, y: number, width: number, height: number): Body {
     const modifiedX = x + (Math.sign(x) * width) / 2
     const modifiedY = y + (Math.sign(y) * height) / 2
@@ -97,7 +73,7 @@ export class Physics {
     // Convert array into object for matter.js
     const xyVertices = vertices.map(([x, y]) => ({ x, y }))
 
-    const body = Bodies.fromVertices(x, y, xyVertices, { angle: Scratch.directionFrom(angle) })
+    const body = Bodies.fromVertices(x, y, xyVertices, { angle })
     if (!body) {
       return
     }

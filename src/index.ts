@@ -17,7 +17,29 @@ class PhysicsExtension {
   constructor(runtime: Runtime) {
     this.runtime = runtime
 
-    this.physics = new Physics()
+    const canvas = this.getCanvas(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
+
+    this.physics = new Physics(canvas)
+  }
+
+  private getCanvas(width: number, height: number): HTMLCanvasElement {
+    const element = document.querySelector('canvas.physics') as HTMLCanvasElement
+    if (element) {
+      return element
+    }
+
+    const canvas = document.createElement('canvas')
+    canvas.className = 'physics'
+    canvas.width = width
+    canvas.height = height
+    canvas.style.zIndex = '100'
+    canvas.style.position = 'absolute'
+    canvas.style.bottom = '0px'
+    canvas.style.left = '320px'
+
+    document.body.prepend(canvas)
+
+    return canvas
   }
 
   getInfo() {
@@ -105,7 +127,7 @@ class PhysicsExtension {
     }
 
     const [positionX, positionY] = drawable._position
-    const direction = drawable._direction
+    const direction = Scratch.directionFrom(drawable._direction)
     const [offsetX, offsetY] = drawable.skin.rotationCenter
     const [scaleX, scaleY] = drawable.scale.map(value => value / 100)
 
