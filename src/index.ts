@@ -117,9 +117,12 @@ class PhysicsExtension {
     }
 
     const { renderer } = this.runtime
-    // console.log(target)
 
     const drawable = renderer._allDrawables[target.drawableID]
+
+    if (!drawable || !drawable.getVisible()) {
+      return
+    }
 
     if (drawable.needsConvexHullPoints()) {
       const points = renderer._getConvexHullPointsForDrawable(target.drawableID)
@@ -155,6 +158,10 @@ class PhysicsExtension {
       if (!target) {
         this.physics.removeBody(body)
         this.bodies.delete(targetID)
+        continue
+      }
+
+      if (!target.visible) {
         continue
       }
 
