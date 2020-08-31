@@ -24,8 +24,8 @@ class PhysicsExtension {
     return {
       id: 'physics',
       name: 'Physics',
-      menuIconURI: require('../assets/images/menuIcon.png'),
-      blockIconURI: require('../assets/images/blockIcon.png'),
+      menuIconURI: require('../assets/images/menuIcon.svg'),
+      blockIconURI: require('../assets/images/blockIcon.svg'),
       color1: '#a0a0a0',
       color2: '#808080',
       color3: '#606060',
