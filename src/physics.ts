@@ -6,6 +6,8 @@ import { Scratch } from './scratch'
 // Set poly-decomp to global variable for matter.js
 window.decomp = decomp
 
+const debugEnabled = true
+
 enum State {
   STOP,
   RUNNING,
@@ -114,7 +116,9 @@ export class Physics {
     this.listener = listener
 
     Runner.run(this.engine)
-    Render.run(this.render)
+    if (debugEnabled) {
+      Render.run(this.render)
+    }
 
     if (this.listener) {
       Events.on(this.engine, 'afterTick', this.listener)
@@ -128,7 +132,9 @@ export class Physics {
     this.state = State.STOP
 
     Runner.stop(this.runner)
-    Render.stop(this.render)
+    if (debugEnabled) {
+      Render.stop(this.render)
+    }
 
     if (this.listener) {
       Events.off(this.engine, 'afterTick', this.listener)
