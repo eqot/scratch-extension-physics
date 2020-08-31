@@ -112,7 +112,7 @@ class PhysicsExtension {
   }
 
   private activateRenderedTarget(target: RenderedTarget): void {
-    if (target.isStage || this.bodies.has(target.drawableID)) {
+    if (target.isStage || this.bodies.has(target.id)) {
       return
     }
 
@@ -138,7 +138,7 @@ class PhysicsExtension {
 
     const body = this.physics.addBody(positionX, -positionY, vertices, direction)
 
-    this.bodies.set(target.drawableID, { body, target })
+    this.bodies.set(target.id, body)
   }
 
   start(): void {
@@ -150,10 +150,11 @@ class PhysicsExtension {
   }
 
   private updateRenderedTarget(): void {
-    for (const [id, { body, target }] of this.bodies.entries()) {
-      const t = this.runtime.getTargetById(target.id)
-      if (!t) {
+    for (const [targetID, body] of this.bodies.entries()) {
+      const target = this.runtime.getTargetById(targetID)
+      if (!target) {
         this.physics.removeBody(body)
+        this.bodies.delete(targetID)
         continue
       }
 
