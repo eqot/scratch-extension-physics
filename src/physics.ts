@@ -66,21 +66,18 @@ export class Physics {
     return Bodies.rectangle(modifiedX, modifiedY, width, height, { isStatic: true })
   }
 
-  addBody(x: number, y: number, vertices, angle: number): Body {
+  createBody(x: number, y: number, vertices, angle: number): Body {
     // Remove duplicate points to create body as expected
     decomp.removeDuplicatePoints(vertices, 0.01)
 
     // Convert array into object for matter.js
     const xyVertices = vertices.map(([x, y]) => ({ x, y }))
 
-    const body = Bodies.fromVertices(x, y, xyVertices, { angle })
-    if (!body) {
-      return
-    }
+    return Bodies.fromVertices(x, y, xyVertices, { angle })
+  }
 
+  addBody(body: Body): void {
     World.add(this.engine.world, body)
-
-    return body
   }
 
   removeBody(body: Body): void {

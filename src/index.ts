@@ -12,7 +12,7 @@ class PhysicsExtension {
 
   private physics: Physics
 
-  private bodies = new Map()
+  private bodies = new Map<string, Body>()
 
   constructor(runtime: Runtime) {
     this.runtime = runtime
@@ -112,20 +112,26 @@ class PhysicsExtension {
   }
 
   private activateRenderedTarget(target: RenderedTarget): void {
+    const body = this.createBody(target)
+    if (!body) {
+      return
+    }
+
+    this.addRenderedTarget(target.id, body)
+  }
+
+  private createBody(target: RenderedTarget): Body {
     if (target.isStage || this.bodies.has(target.id)) {
       return
     }
 
-    const { renderer } = this.runtime
-
-    const drawable = renderer._allDrawables[target.drawableID]
-
+    const drawable = this.runtime.renderer._allDrawables[target.drawableID]
     if (!drawable || !drawable.getVisible()) {
       return
     }
 
     if (drawable.needsConvexHullPoints()) {
-      const points = renderer._getConvexHullPointsForDrawable(target.drawableID)
+      const points = this.runtime.renderer._getConvexHullPointsForDrawable(target.drawableID)
       drawable.setConvexHullPoints(points)
     }
 
@@ -139,25 +145,28 @@ class PhysicsExtension {
       (y - offsetY) * scaleY,
     ])
 
-    const body = this.physics.addBody(positionX, -positionY, vertices, direction)
-
-    this.bodies.set(target.id, body)
+    return this.physics.createBody(positionX, -positionY, vertices, direction)
   }
 
-  start(): void {
-    this.physics.start(() => this.updateRenderedTarget())
+  private addRenderedTarget(targetID: string, body: Body): void {
+    this.physics.addBody(body)
+
+    this.bodies.set(targetID, body)
   }
 
-  stop(): void {
-    this.physics.stop()
+  private removeRenderedTarget(targetID: string): void {
+    const body = this.bodies.get(targetID)
+    this.physics.removeBody(body)
+
+    this.bodies.delete(targetID)
   }
 
   private updateRenderedTarget(): void {
     for (const [targetID, body] of this.bodies.entries()) {
       const target = this.runtime.getTargetById(targetID)
       if (!target) {
-        this.physics.removeBody(body)
-        this.bodies.delete(targetID)
+        this.removeRenderedTarget(targetID)
+
         continue
       }
 
@@ -171,6 +180,14 @@ class PhysicsExtension {
       target.setXY(x, -y)
       target.setDirection(direction)
     }
+  }
+
+  start(): void {
+    this.physics.start(() => this.updateRenderedTarget())
+  }
+
+  stop(): void {
+    this.physics.stop()
   }
 }
 
