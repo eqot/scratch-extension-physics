@@ -4,11 +4,13 @@ import decomp from 'poly-decomp'
 // Set poly-decomp to global variable for matter.js
 window.decomp = decomp
 
-const debugEnabled = true
-
 enum State {
   STOP,
   RUNNING,
+}
+
+type Options = {
+  isVisible?: boolean
 }
 
 export class Physics {
@@ -25,8 +27,12 @@ export class Physics {
 
   private listener?: () => void
 
-  constructor(canvas: HTMLCanvasElement) {
+  private isVisible = false
+
+  constructor(canvas: HTMLCanvasElement, options?: Options) {
     this.initialize(canvas)
+
+    this.isVisible = options && options.isVisible
   }
 
   private initialize(canvas: HTMLCanvasElement) {
@@ -93,7 +99,7 @@ export class Physics {
     this.listener = listener
 
     Runner.run(this.engine)
-    if (debugEnabled) {
+    if (this.isVisible) {
       Render.run(this.render)
     }
 
@@ -109,7 +115,7 @@ export class Physics {
     this.state = State.STOP
 
     Runner.stop(this.runner)
-    if (debugEnabled) {
+    if (this.isVisible) {
       Render.stop(this.render)
     }
 

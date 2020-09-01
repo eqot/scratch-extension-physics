@@ -19,7 +19,7 @@ class PhysicsExtension {
 
     const canvas = this.getCanvas(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
 
-    this.physics = new Physics(canvas)
+    this.physics = new Physics(canvas, { isVisible: true })
   }
 
   private getCanvas(width: number, height: number): HTMLCanvasElement {
