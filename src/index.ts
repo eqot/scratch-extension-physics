@@ -14,21 +14,18 @@ class PhysicsExtension {
 
   private bodies = new Map<string, Body>()
 
-  private physicsCanvas: HTMLCanvasElement
-  private dragCanvas: HTMLCanvasElement
+  private canvas: HTMLCanvasElement
+  private draggingTarget?: RenderedTarget
 
   constructor(runtime: Runtime) {
     this.runtime = runtime
-
-    this.physicsCanvas = this.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
-    this.dragCanvas = document.querySelector('canvas[class^=stage_dragging-sprite]')
-
-    // this.physics = new Physics(this.physicsCanvas, { isVisible: true })
-    this.physics = new Physics(this.physicsCanvas)
-
     this.runtime.on(Runtime.PROJECT_STOP_ALL, () => {
       this.stop()
     })
+
+    this.canvas = this.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
+    // this.physics = new Physics(this.canvas, { isVisible: true })
+    this.physics = new Physics(this.canvas)
   }
 
   private getCanvasForPhysics(width: number, height: number): HTMLCanvasElement {
@@ -173,33 +170,37 @@ class PhysicsExtension {
   private updateRenderedTarget(): void {
     for (const [targetId, body] of this.bodies.entries()) {
       const target = this.runtime.getTargetById(targetId)
-      if (!target) {
-        this.removeRenderedTarget(targetId)
+      if (target) {
+        if (target.dragging) {
+          this.draggingTarget = target
+        } else {
+          if (this.draggingTarget && this.draggingTarget.id === target.id) {
+            this.updateBodyFromRenderedTarget(body, target)
 
-        continue
-      }
-
-      if (target.dragging) {
-        const position = this.dragCanvas.style.transform
-          .match(/[\d\.]+/g)
-          .map(value => parseFloat(value))
-
-        const x = position[0] - Scratch.Canvas.WIDTH / 2
-        const y = position[1] - Scratch.Canvas.HEIGHT / 2
-        const direction = Scratch.directionFrom(target.direction)
-
-        this.physics.setBodyProperties(body, x, y, direction)
-      } else {
-        if (!target.visible) {
-          continue
+            this.draggingTarget = null
+          } else {
+            this.updateRenderedTargetFromBody(target, body)
+          }
         }
-
-        const { x, y } = body.position
-        const direction = Scratch.directionTo(body.angle)
-        target.setXY(x, -y)
-        target.setDirection(direction)
+      } else {
+        this.removeRenderedTarget(targetId)
       }
     }
+  }
+
+  private updateBodyFromRenderedTarget(body: Body, target: RenderedTarget): void {
+    const { x, y } = target
+    const direction = Scratch.directionFrom(target.direction)
+
+    this.physics.setBodyProperties(body, x, -y, direction)
+  }
+
+  private updateRenderedTargetFromBody(target: RenderedTarget, body: Body): void {
+    const { x, y } = body.position
+    const direction = Scratch.directionTo(body.angle)
+
+    target.setXY(x, -y)
+    target.setDirection(direction)
   }
 
   start(): void {
