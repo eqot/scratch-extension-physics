@@ -3,6 +3,7 @@ import ArgumentType from 'scratch-vm/src/extension-support/argument-type'
 import BlockType from 'scratch-vm/src/extension-support/block-type'
 import Cast from 'scratch-vm/src/util/cast'
 import RenderedTarget from 'scratch-vm/src/sprites/rendered-target'
+import queryString from 'query-string'
 
 import { Physics } from './physics'
 import { Scratch } from './scratch'
@@ -17,6 +18,8 @@ class PhysicsExtension {
   private canvas: HTMLCanvasElement
   private draggingTarget?: RenderedTarget
 
+  private isDebug = queryString.parse(location.search).debug === 'true'
+
   constructor(runtime: Runtime) {
     this.runtime = runtime
     this.runtime.on(Runtime.PROJECT_STOP_ALL, () => {
@@ -24,8 +27,7 @@ class PhysicsExtension {
     })
 
     this.canvas = this.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
-    // this.physics = new Physics(this.canvas, { isVisible: true })
-    this.physics = new Physics(this.canvas)
+    this.physics = new Physics(this.canvas, { isVisible: this.isDebug })
   }
 
   private getCanvasForPhysics(width: number, height: number): HTMLCanvasElement {

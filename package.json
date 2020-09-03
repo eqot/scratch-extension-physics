@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "matter-js": "^0.14.2",
-    "poly-decomp": "^0.3.0"
+    "poly-decomp": "^0.3.0",
+    "query-string": "^6.13.1"
   }
 }
