@@ -14,16 +14,20 @@ class PhysicsExtension {
 
   private bodies = new Map<string, Body>()
 
+  private physicsCanvas: HTMLCanvasElement
+  private dragCanvas: HTMLCanvasElement
+
   constructor(runtime: Runtime) {
     this.runtime = runtime
 
-    const canvas = this.getCanvas(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
+    this.physicsCanvas = this.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
+    this.dragCanvas = document.querySelector('canvas[class^=stage_dragging-sprite]')
 
-    // this.physics = new Physics(canvas, { isVisible: true })
-    this.physics = new Physics(canvas)
+    // this.physics = new Physics(this.physicsCanvas, { isVisible: true })
+    this.physics = new Physics(this.physicsCanvas)
   }
 
-  private getCanvas(width: number, height: number): HTMLCanvasElement {
+  private getCanvasForPhysics(width: number, height: number): HTMLCanvasElement {
     const element = document.querySelector('canvas.physics') as HTMLCanvasElement
     if (element) {
       return element
@@ -171,15 +175,26 @@ class PhysicsExtension {
         continue
       }
 
-      if (!target.visible) {
-        continue
+      if (target.dragging) {
+        const position = this.dragCanvas.style.transform
+          .match(/[\d\.]+/g)
+          .map(value => parseFloat(value))
+
+        const x = position[0] - Scratch.Canvas.WIDTH / 2
+        const y = position[1] - Scratch.Canvas.HEIGHT / 2
+        const direction = Scratch.directionFrom(target.direction)
+
+        this.physics.setBodyProperties(body, x, y, direction)
+      } else {
+        if (!target.visible) {
+          continue
+        }
+
+        const { x, y } = body.position
+        const direction = Scratch.directionTo(body.angle)
+        target.setXY(x, -y)
+        target.setDirection(direction)
       }
-
-      const { x, y } = body.position
-      const direction = Scratch.directionTo(body.angle)
-
-      target.setXY(x, -y)
-      target.setDirection(direction)
     }
   }
 

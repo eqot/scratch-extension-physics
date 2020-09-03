@@ -90,6 +90,11 @@ export class Physics {
     World.remove(this.engine.world, body)
   }
 
+  setBodyProperties(body: Body, x: number, y: number, angle: number): void {
+    Body.setPosition(body, { x, y })
+    Body.setAngle(body, angle)
+  }
+
   start(listener: () => void): void {
     if (this.state === State.RUNNING) {
       return
