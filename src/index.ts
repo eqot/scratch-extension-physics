@@ -26,7 +26,7 @@ class PhysicsExtension {
     // this.physics = new Physics(this.physicsCanvas, { isVisible: true })
     this.physics = new Physics(this.physicsCanvas)
 
-    this.runtime.on('PROJECT_STOP_ALL', () => {
+    this.runtime.on(Runtime.PROJECT_STOP_ALL, () => {
       this.stop()
     })
   }
@@ -157,24 +157,24 @@ class PhysicsExtension {
     return this.physics.createBody(positionX, -positionY, vertices, direction)
   }
 
-  private addRenderedTarget(targetID: string, body: Body): void {
+  private addRenderedTarget(targetId: string, body: Body): void {
     this.physics.addBody(body)
 
-    this.bodies.set(targetID, body)
+    this.bodies.set(targetId, body)
   }
 
-  private removeRenderedTarget(targetID: string): void {
-    const body = this.bodies.get(targetID)
+  private removeRenderedTarget(targetId: string): void {
+    const body = this.bodies.get(targetId)
     this.physics.removeBody(body)
 
-    this.bodies.delete(targetID)
+    this.bodies.delete(targetId)
   }
 
   private updateRenderedTarget(): void {
-    for (const [targetID, body] of this.bodies.entries()) {
-      const target = this.runtime.getTargetById(targetID)
+    for (const [targetId, body] of this.bodies.entries()) {
+      const target = this.runtime.getTargetById(targetId)
       if (!target) {
-        this.removeRenderedTarget(targetID)
+        this.removeRenderedTarget(targetId)
 
         continue
       }
