@@ -103,7 +103,8 @@ export class Physics {
 
     this.listener = listener
 
-    Runner.run(this.engine)
+    Runner.start(this.runner, this.engine)
+
     if (this.isVisible) {
       Render.run(this.render)
     }
@@ -120,6 +121,7 @@ export class Physics {
     this.state = State.STOP
 
     Runner.stop(this.runner)
+
     if (this.isVisible) {
       Render.stop(this.render)
     }

@@ -25,6 +25,10 @@ class PhysicsExtension {
 
     // this.physics = new Physics(this.physicsCanvas, { isVisible: true })
     this.physics = new Physics(this.physicsCanvas)
+
+    this.runtime.on('PROJECT_STOP_ALL', () => {
+      this.stop()
+    })
   }
 
   private getCanvasForPhysics(width: number, height: number): HTMLCanvasElement {
