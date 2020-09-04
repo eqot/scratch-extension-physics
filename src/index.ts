@@ -2,7 +2,6 @@ import Runtime from 'scratch-vm/src/engine/runtime'
 import ArgumentType from 'scratch-vm/src/extension-support/argument-type'
 import BlockType from 'scratch-vm/src/extension-support/block-type'
 import Cast from 'scratch-vm/src/util/cast'
-import queryString from 'query-string'
 
 import { Targets } from './targets'
 import { Physics } from './physics'
@@ -14,8 +13,6 @@ class PhysicsExtension {
 
   private targets: Targets
 
-  private isDebug = queryString.parse(location.search).debug === 'true'
-
   constructor(runtime: Runtime) {
     this.runtime = runtime
     this.runtime.on(Runtime.PROJECT_STOP_ALL, () => {
@@ -23,7 +20,7 @@ class PhysicsExtension {
     })
 
     const canvas = Utils.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
-    const physics = new Physics(canvas, { isVisible: this.isDebug })
+    const physics = new Physics(canvas, { isVisible: Utils.isDebug() })
 
     this.targets = new Targets(this.runtime, physics)
   }
@@ -82,14 +79,12 @@ class PhysicsExtension {
 
   activate(args: any, util): void {
     switch (args.TARGET) {
-      case 'thisSprite':
-        this.targets.activate(util.target)
+      case 'allSprites':
+        this.targets.activateAll()
         break
 
-      case 'allSprites':
-        for (const target of this.runtime.targets) {
-          this.targets.activate(target)
-        }
+      case 'thisSprite':
+        this.targets.activate(util.target)
         break
 
       default:

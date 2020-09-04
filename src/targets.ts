@@ -16,6 +16,12 @@ export class Targets {
     this.physics = physics
   }
 
+  activateAll(): void {
+    for (const target of this.runtime.targets) {
+      this.activate(target)
+    }
+  }
+
   activate(target: RenderedTarget): void {
     const body = this.createBody(target)
     if (!body) {

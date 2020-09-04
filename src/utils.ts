@@ -1,4 +1,10 @@
+import queryString from 'query-string'
+
 export class Utils {
+  static isDebug(): boolean {
+    return queryString.parse(location.search).debug === 'true'
+  }
+
   static getCanvasForPhysics(width: number, height: number): HTMLCanvasElement {
     const element = document.querySelector('canvas.physics') as HTMLCanvasElement
     if (element) {
