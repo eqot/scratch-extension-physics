@@ -1,6 +1,4 @@
 import Runtime from 'scratch-vm/src/engine/runtime'
-import ArgumentType from 'scratch-vm/src/extension-support/argument-type'
-import BlockType from 'scratch-vm/src/extension-support/block-type'
 import Cast from 'scratch-vm/src/util/cast'
 
 import { Targets } from './targets'
@@ -9,8 +7,11 @@ import { Scratch } from './scratch'
 import { translations } from './translations'
 import { Utils } from './utils'
 
+import { Blocks } from './blocks'
+
 class PhysicsExtension {
   private runtime: Runtime
+  private blocks
 
   private targets: Targets
 
@@ -21,6 +22,11 @@ class PhysicsExtension {
     })
 
     translations.initialize(this.runtime, locale)
+
+    this.blocks = Blocks()
+    for (const funcName in this.blocks.funcs) {
+      this[funcName] = this.blocks.funcs[funcName].bind(this)
+    }
 
     const canvas = Utils.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
     const physics = new Physics(canvas, { isVisible: Utils.isDebug() })
@@ -38,69 +44,9 @@ class PhysicsExtension {
       color2: '#808080',
       color3: '#606060',
 
-      blocks: [
-        {
-          opcode: 'activate',
-          blockType: BlockType.COMMAND,
-          text: translations.label('activate'),
-          arguments: {
-            TARGET: {
-              type: ArgumentType.STRING,
-              menu: 'activationTarget',
-            },
-          },
-        },
-        {
-          opcode: 'start',
-          blockType: BlockType.COMMAND,
-          text: translations.label('start'),
-        },
-        {
-          opcode: 'stop',
-          blockType: BlockType.COMMAND,
-          text: translations.label('stop'),
-        },
-      ],
-
-      menus: {
-        activationTarget: {
-          acceptReporters: true,
-          items: [
-            {
-              value: 'allSprites',
-              text: translations.label('all sprites'),
-            },
-            {
-              value: 'thisSprite',
-              text: translations.label('this sprite'),
-            },
-          ],
-        },
-      },
+      blocks: this.blocks.info(),
+      menus: this.blocks.menus(),
     }
-  }
-
-  activate(args: any, util): void {
-    switch (args.TARGET) {
-      case 'allSprites':
-        this.targets.activateAll()
-        break
-
-      case 'thisSprite':
-        this.targets.activate(util.target)
-        break
-
-      default:
-        break
-    }
-  }
-
-  start(): void {
-    this.targets.start()
-  }
-
-  stop(): void {
-    this.targets.stop()
   }
 }
 
