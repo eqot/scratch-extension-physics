@@ -6,6 +6,7 @@ import Cast from 'scratch-vm/src/util/cast'
 import { Targets } from './targets'
 import { Physics } from './physics'
 import { Scratch } from './scratch'
+import { translations } from './translations'
 import { Utils } from './utils'
 
 class PhysicsExtension {
@@ -13,11 +14,13 @@ class PhysicsExtension {
 
   private targets: Targets
 
-  constructor(runtime: Runtime) {
+  constructor(runtime: Runtime, locale?: string) {
     this.runtime = runtime
     this.runtime.on(Runtime.PROJECT_STOP_ALL, () => {
       this.stop()
     })
+
+    translations.initialize(this.runtime, locale)
 
     const canvas = Utils.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
     const physics = new Physics(canvas, { isVisible: Utils.isDebug() })
@@ -28,7 +31,7 @@ class PhysicsExtension {
   getInfo() {
     return {
       id: 'physics',
-      name: 'Physics',
+      name: translations.label('Physics'),
       menuIconURI: require('../assets/images/menuIcon.svg'),
       blockIconURI: require('../assets/images/blockIcon.svg'),
       color1: '#a0a0a0',
@@ -39,7 +42,7 @@ class PhysicsExtension {
         {
           opcode: 'activate',
           blockType: BlockType.COMMAND,
-          text: '[TARGET] で有効にする',
+          text: translations.label('activate'),
           arguments: {
             TARGET: {
               type: ArgumentType.STRING,
@@ -50,12 +53,12 @@ class PhysicsExtension {
         {
           opcode: 'start',
           blockType: BlockType.COMMAND,
-          text: '開始する',
+          text: translations.label('start'),
         },
         {
           opcode: 'stop',
           blockType: BlockType.COMMAND,
-          text: '停止する',
+          text: translations.label('stop'),
         },
       ],
 
@@ -65,11 +68,11 @@ class PhysicsExtension {
           items: [
             {
               value: 'allSprites',
-              text: 'すべてのスプライト',
+              text: translations.label('all sprites'),
             },
             {
               value: 'thisSprite',
-              text: 'このスプライト',
+              text: translations.label('this sprite'),
             },
           ],
         },
