@@ -1,15 +1,15 @@
 import Runtime from 'scratch-vm/src/engine/runtime'
-import Cast from 'scratch-vm/src/util/cast'
 
+import { Blocks } from './blocks'
 import { Targets } from './targets'
 import { Physics } from './physics'
 import { Scratch } from './scratch'
-import { translations } from './translations'
 import { Utils } from './utils'
-
-import { Blocks } from './blocks'
+import { translations } from './translations'
 
 class PhysicsExtension {
+  private static BLOCKS_ORDER = ['activate', 'start', 'stop']
+
   private runtime: Runtime
   private blocks
 
@@ -23,9 +23,9 @@ class PhysicsExtension {
 
     translations.initialize(this.runtime, locale)
 
-    this.blocks = Blocks()
-    for (const funcName in this.blocks.funcs) {
-      this[funcName] = this.blocks.funcs[funcName].bind(this)
+    this.blocks = Blocks(PhysicsExtension.BLOCKS_ORDER)
+    for (const functionName in this.blocks.functions) {
+      this[functionName] = this.blocks.functions[functionName].bind(this)
     }
 
     const canvas = Utils.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
