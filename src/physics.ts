@@ -72,6 +72,11 @@ export class Physics {
     return Bodies.rectangle(modifiedX, modifiedY, width, height, { isStatic: true })
   }
 
+  public setGravity(gravityX: number, gravityY: number): void {
+    this.engine.world.gravity.x = gravityX
+    this.engine.world.gravity.y = gravityY
+  }
+
   createBody(x: number, y: number, vertices, angle: number): Body {
     // Remove duplicate points to create body as expected
     decomp.removeDuplicatePoints(vertices, 0.01)

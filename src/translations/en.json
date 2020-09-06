@@ -8,5 +8,7 @@
   "all sprites": "all sprites",
   "this sprite": "this sprite",
 
+  "set gravity": "set gravity to x: [GRAVITY_X] y: [GRAVITY_Y]",
+
   "set restitution": "set restitution to [RESTITUTION]"
 }

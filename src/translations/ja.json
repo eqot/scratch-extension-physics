@@ -8,5 +8,7 @@
   "all sprites": "すべてのスプライト",
   "this sprite": "このスプライト",
 
+  "set gravity": "重力のx座標を [GRAVITY_X]、y座標を [GRAVITY_Y] にする",
+
   "set restitution": "反発力を [RESTITUTION] にする"
 }

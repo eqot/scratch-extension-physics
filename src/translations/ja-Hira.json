@@ -8,5 +8,7 @@
   "all sprites": "すべてのスプライト",
   "this sprite": "このスプライト",
 
+  "set gravity": "じゅうりょくのxざひょうを [GRAVITY_X]、yざひょうを [GRAVITY_Y] にする",
+
   "set restitution": "はんぱつりょくを [RESTITUTION] にする"
 }

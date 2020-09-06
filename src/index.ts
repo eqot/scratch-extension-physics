@@ -8,11 +8,12 @@ import { Utils } from './utils'
 import { translations } from './translations'
 
 class PhysicsExtension {
-  private static BLOCKS_ORDER = ['activate', 'start', 'stop', 'setRestitution']
+  private static BLOCKS_ORDER = ['activate', 'start', 'stop', 'setGravity', 'setRestitution']
 
   private runtime: Runtime
   private blocks
 
+  private physics: Physics
   private targets: Targets
 
   constructor(runtime: Runtime, locale?: string) {
@@ -29,9 +30,9 @@ class PhysicsExtension {
     }
 
     const canvas = this.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
-    const physics = new Physics(canvas, { isVisible: Utils.isDebug() })
+    this.physics = new Physics(canvas, { isVisible: Utils.isDebug() })
 
-    this.targets = new Targets(this.runtime, physics)
+    this.targets = new Targets(this.runtime, this.physics)
   }
 
   private getCanvasForPhysics(width: number, height: number): HTMLCanvasElement {
