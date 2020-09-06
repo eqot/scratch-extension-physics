@@ -6,5 +6,7 @@
   "stop": "ていしする",
 
   "all sprites": "すべてのスプライト",
-  "this sprite": "このスプライト"
+  "this sprite": "このスプライト",
+
+  "set restitution": "はんぱつりょくを [RESTITUTION] にする"
 }

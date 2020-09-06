@@ -6,5 +6,7 @@
   "stop": "停止する",
 
   "all sprites": "すべてのスプライト",
-  "this sprite": "このスプライト"
+  "this sprite": "このスプライト",
+
+  "set restitution": "反発力を [RESTITUTION] にする"
 }

@@ -6,5 +6,7 @@
   "stop": "stop",
 
   "all sprites": "all sprites",
-  "this sprite": "this sprite"
+  "this sprite": "this sprite",
+
+  "set restitution": "set restitution to [RESTITUTION]"
 }

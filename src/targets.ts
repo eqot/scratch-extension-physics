@@ -115,4 +115,8 @@ export class Targets {
     target.setXY(x, -y)
     target.setDirection(direction)
   }
+
+  getBody(target: RenderedTarget): Body | undefined {
+    return this.bodies.get(target.id)
+  }
 }
