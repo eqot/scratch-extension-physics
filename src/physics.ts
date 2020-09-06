@@ -16,7 +16,7 @@ type Options = {
 export class Physics {
   private static Boundary = {
     LENGTH: 1000,
-    THICKNESS: 10,
+    THICKNESS: 100,
   }
 
   private state: State = State.STOP

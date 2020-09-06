@@ -14,7 +14,7 @@ const SetRestitutionBlock = {
       arguments: {
         RESTITUTION: {
           type: ArgumentType.NUMBER,
-          defaultValue: 1,
+          defaultValue: 0,
         },
       },
     }
