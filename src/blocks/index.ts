@@ -10,6 +10,12 @@ export type BlockInfo = {
   filter?: string[]
 }
 
+type Block = {
+  info: any
+  menus: any
+  functions: any
+}
+
 const Separator = '---'
 
 const Blocks = (blocksOrder: string[]) => {
@@ -20,12 +26,23 @@ const Blocks = (blocksOrder: string[]) => {
 
     const { info, menus, ...functions } = require(`./${block}.ts`).default
     return { info, menus, functions }
-  })
+  }) as Block[]
+
+  const info = () => blocks.map(block => (isSeparator(block) ? block : block.info()))
+  const menus = () =>
+    blocks.reduce((acc, { menus }) => (menus ? Object.assign(acc, menus()) : acc), {})
+  const functions = blocks.reduce((acc, { functions }) => Object.assign(acc, functions), {})
 
   return {
-    info: () => blocks.map(block => (isSeparator(block) ? block : block.info())),
-    menus: () => blocks.reduce((acc, { menus }) => (menus ? Object.assign(acc, menus()) : acc), {}),
-    functions: blocks.reduce((acc, { functions }) => Object.assign(acc, functions), {}),
+    info,
+    menus,
+    functions,
+
+    inject(object: any): void {
+      for (const functionName in functions) {
+        object[functionName] = functions[functionName].bind(object)
+      }
+    },
   }
 }
 

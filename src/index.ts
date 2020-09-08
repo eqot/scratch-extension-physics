@@ -25,9 +25,7 @@ class PhysicsExtension {
     translations.initialize(this.runtime, locale)
 
     this.blocks = Blocks(PhysicsExtension.BLOCKS_ORDER)
-    for (const functionName in this.blocks.functions) {
-      this[functionName] = this.blocks.functions[functionName].bind(this)
-    }
+    this.blocks.inject(this)
 
     const canvas = this.getCanvasForPhysics(Scratch.Canvas.WIDTH, Scratch.Canvas.HEIGHT)
     this.physics = new Physics(canvas, { isVisible: Utils.isDebug() })
@@ -61,9 +59,9 @@ class PhysicsExtension {
       name: translations.label('Physics'),
       menuIconURI: require('../assets/images/menuIcon.svg'),
       blockIconURI: require('../assets/images/blockIcon.svg'),
-      color1: '#a0a0a0',
-      color2: '#808080',
-      color3: '#606060',
+      color1: '#008600',
+      color2: '#0f5e0f',
+      color3: '#094409',
 
       blocks: this.blocks.info(),
       menus: this.blocks.menus(),
