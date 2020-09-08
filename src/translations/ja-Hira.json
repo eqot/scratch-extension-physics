@@ -2,13 +2,17 @@
   "Physics": "ぶつり",
 
   "activate": "[TARGET] でゆうこうにする",
-  "start": "かいしする",
-  "stop": "ていしする",
-
   "all sprites": "すべてのスプライト",
   "this sprite": "このスプライト",
 
+  "start": "かいしする",
+  "stop": "ていしする",
+
   "set gravity": "じゅうりょくのxざひょうを [GRAVITY_X]、yざひょうを [GRAVITY_Y] にする",
+
+  "set static": "[STATIC] する",
+  "static": "こてい",
+  "dynamic": "こていをかいじょ",
 
   "set restitution": "はんぱつりょくを [RESTITUTION] にする"
 }

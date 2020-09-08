@@ -2,13 +2,17 @@
   "Physics": "Physics",
 
   "activate": "activate for [TARGET]",
-  "start": "start",
-  "stop": "stop",
-
   "all sprites": "all sprites",
   "this sprite": "this sprite",
 
+  "start": "start",
+  "stop": "stop",
+
   "set gravity": "set gravity to x: [GRAVITY_X] y: [GRAVITY_Y]",
+
+  "set static": "set [STATIC]",
+  "static": "static",
+  "dynamic": "dynamic",
 
   "set restitution": "set restitution to [RESTITUTION]"
 }

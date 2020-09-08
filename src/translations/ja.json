@@ -2,13 +2,17 @@
   "Physics": "物理",
 
   "activate": "[TARGET] で有効にする",
-  "start": "開始する",
-  "stop": "停止する",
-
   "all sprites": "すべてのスプライト",
   "this sprite": "このスプライト",
 
+  "start": "開始する",
+  "stop": "停止する",
+
   "set gravity": "重力のx座標を [GRAVITY_X]、y座標を [GRAVITY_Y] にする",
+
+  "set static": "[STATIC] する",
+  "static": "固定",
+  "dynamic": "固定を解除",
 
   "set restitution": "反発力を [RESTITUTION] にする"
 }

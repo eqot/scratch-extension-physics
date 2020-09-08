@@ -8,7 +8,15 @@ import { Utils } from './utils'
 import { translations } from './translations'
 
 class PhysicsExtension {
-  private static BLOCKS_ORDER = ['activate', 'start', 'stop', 'setGravity', '---', 'setRestitution']
+  private static BLOCKS_ORDER = [
+    'activate',
+    'start',
+    'stop',
+    'setGravity',
+    '---',
+    'setStatic',
+    'setRestitution',
+  ]
 
   private runtime: Runtime
   private blocks
