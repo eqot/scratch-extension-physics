@@ -1,4 +1,4 @@
-import { Engine, Render, Runner, World, Bodies, Body, Bounds, Events } from 'matter-js'
+import { Engine, Render, Runner, World, Bodies, Body, Bounds, Constraint, Events } from 'matter-js'
 import decomp from 'poly-decomp'
 
 // Set poly-decomp to global variable for matter.js
@@ -28,6 +28,8 @@ export class Physics {
   private listener?: () => void
 
   private isVisible = false
+
+  private constraints = new Map<number, Constraint>()
 
   constructor(canvas: HTMLCanvasElement, options?: Options) {
     this.initialize(canvas)
@@ -98,6 +100,30 @@ export class Physics {
   setBodyProperties(body: Body, x: number, y: number, angle: number): void {
     Body.setPosition(body, { x, y })
     Body.setAngle(body, angle)
+  }
+
+  setConstraint(body: Body, x: number, y: number, stiffness: number, length: number): void {
+    this.removeConstraint(body)
+
+    const constraint = Constraint.create({
+      bodyA: body,
+      pointB: { x, y },
+      stiffness,
+      length,
+    })
+
+    World.add(this.engine.world, constraint)
+
+    this.constraints.set(body.id, constraint)
+  }
+
+  removeConstraint(body: Body): void {
+    const constraint = this.constraints.get(body.id)
+    if (!constraint) {
+      return
+    }
+
+    World.remove(this.engine.world, constraint)
   }
 
   start(listener: () => void): void {

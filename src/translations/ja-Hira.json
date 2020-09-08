@@ -14,5 +14,8 @@
   "static": "こてい",
   "dynamic": "こていをかいじょ",
 
-  "set restitution": "はんぱつりょくを [RESTITUTION] にする"
+  "set restitution": "はんぱつりょくを [RESTITUTION] にする",
+
+  "set constraint": "コンストレイントをせっていする [X] [Y] [STIFFNESS] [LENGTH]",
+  "remove constraint": "コンストレイントをさくじょする"
 }

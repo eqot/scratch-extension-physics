@@ -14,5 +14,8 @@
   "static": "固定",
   "dynamic": "固定を解除",
 
-  "set restitution": "反発力を [RESTITUTION] にする"
+  "set restitution": "反発力を [RESTITUTION] にする",
+
+  "set constraint": "コンストレイントを設定する [X] [Y] [STIFFNESS] [LENGTH]",
+  "remove constraint": "コンストレイントを削除する"
 }

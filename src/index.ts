@@ -16,6 +16,8 @@ class PhysicsExtension {
     '---',
     'setStatic',
     'setRestitution',
+    'setConstraint',
+    'removeConstraint',
   ]
 
   private runtime: Runtime

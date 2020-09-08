@@ -14,5 +14,8 @@
   "static": "static",
   "dynamic": "dynamic",
 
-  "set restitution": "set restitution to [RESTITUTION]"
+  "set restitution": "set restitution to [RESTITUTION]",
+
+  "set constraint": "set constraint at x: [X] y: [Y] with stiffness: [STIFFNESS] length: [LENGTH]",
+  "remove constraint": "remove constraint"
 }
