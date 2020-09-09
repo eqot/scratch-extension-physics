@@ -14,7 +14,10 @@
   "static": "こてい",
   "dynamic": "こていをかいじょ",
 
-  "set restitution": "はんぱつりょくを [RESTITUTION] にする",
+  "set sprite property": "[PROPERTY] を [VALUE] にする",
+  "restitution": "はんぱつりょく",
+  "density": "みつど",
+  "mass": "しつりょう",
 
   "set constraint": "コンストレイントをせっていする [X] [Y] [STIFFNESS] [LENGTH]",
   "remove constraint": "コンストレイントをさくじょする"

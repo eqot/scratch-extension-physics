@@ -15,7 +15,7 @@ class PhysicsExtension {
     'setGravity',
     '---',
     'setStatic',
-    'setRestitution',
+    'setSpriteProperty',
     'setConstraint',
     'removeConstraint',
   ]

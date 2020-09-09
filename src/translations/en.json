@@ -14,7 +14,10 @@
   "static": "static",
   "dynamic": "dynamic",
 
-  "set restitution": "set restitution to [RESTITUTION]",
+  "set sprite property": "set [PROPERTY] to [VALUE]",
+  "restitution": "restitution",
+  "density": "density",
+  "mass": "mass",
 
   "set constraint": "set constraint at x: [X] y: [Y] with stiffness: [STIFFNESS] length: [LENGTH]",
   "remove constraint": "remove constraint"

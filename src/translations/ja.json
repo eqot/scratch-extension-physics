@@ -14,7 +14,10 @@
   "static": "固定",
   "dynamic": "固定を解除",
 
-  "set restitution": "反発力を [RESTITUTION] にする",
+  "set sprite property": "[PROPERTY] を [VALUE] にする",
+  "restitution": "反発力",
+  "density": "密度",
+  "mass": "質量",
 
   "set constraint": "コンストレイントを設定する [X] [Y] [STIFFNESS] [LENGTH]",
   "remove constraint": "コンストレイントを削除する"
