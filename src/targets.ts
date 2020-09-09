@@ -9,6 +9,7 @@ export class Targets {
 
   private physics: Physics
   private bodies = new Map<string, Body>()
+  private previousPosition = new Map<string, { x: number; y: number; direction: number }>()
   private draggingTarget?: RenderedTarget
 
   constructor(runtime, physics) {
@@ -87,18 +88,37 @@ export class Targets {
         if (target.dragging) {
           this.draggingTarget = target
         } else {
-          if (this.draggingTarget && this.draggingTarget.id === target.id) {
+          if (this.isMoving(target) || this.isDragging(target)) {
             this.updateBodyFromRenderedTarget(body, target)
 
             this.draggingTarget = null
           } else {
             this.updateRenderedTargetFromBody(target, body)
           }
+
+          this.updatePreviousPosition(target)
         }
       } else {
         this.remove(targetId)
       }
     }
+  }
+
+  private isMoving(target: RenderedTarget): boolean {
+    const previousPosition = this.previousPosition.get(target.id)
+    if (!previousPosition) {
+      return false
+    }
+
+    return (
+      previousPosition.x !== target.x ||
+      previousPosition.y !== target.y ||
+      previousPosition.direction !== target.direction
+    )
+  }
+
+  private isDragging(target: RenderedTarget): boolean {
+    return this.draggingTarget && this.draggingTarget.id === target.id
   }
 
   private updateBodyFromRenderedTarget(body: Body, target: RenderedTarget): void {
@@ -114,6 +134,14 @@ export class Targets {
 
     target.setXY(x, -y)
     target.setDirection(direction)
+  }
+
+  private updatePreviousPosition(target: RenderedTarget) {
+    this.previousPosition.set(target.id, {
+      x: target.x,
+      y: target.y,
+      direction: target.direction,
+    })
   }
 
   getBody(target: RenderedTarget): Body | undefined {
